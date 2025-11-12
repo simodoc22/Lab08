@@ -62,7 +62,25 @@ class Model:
 
     def __ricorsione(self, sequenza_parziale, giorno, ultimo_impianto, costo_corrente, consumi_settimana):
         """ Implementa la ricorsione """
+        """""""""""
+        # 🟤 E - istruzioni che dovrebbero essere sempre eseguite (raramente necessarie)
+        do_always(...)
 
+        # 🟢 A
+        if terminal_condition:
+            do_something(...)
+            return ...
+
+        for ...:  # un loop, se necessario
+            # 🔵 B
+            compute_partial()
+
+            if filter:  # 🟡 C - Se necessario filtrare prima di procedere con la ricorsione
+                recursion(..., level + 1)
+
+            # 🟣 D
+            back_tracking()
+        """""""""""
 
 
     def __get_consumi_prima_settimana_mese(self, mese: int):
@@ -77,7 +95,7 @@ class Model:
             for j in consumi:
                 if j.data.month == mese and 1 <= j.data.day <= 7:
                     lista_consumi_giorni[j.data.day - 1] = j.kwh ##in modo tale che sia anche una lista ordinata
-            dizionario[i.id_impianto] = lista_consumi_giorni
+            dizionario[i.id] = lista_consumi_giorni
         return dizionario
 
 
