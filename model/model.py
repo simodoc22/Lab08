@@ -1,4 +1,6 @@
 from database.impianto_DAO import ImpiantoDAO
+from database.consumo_DAO import ConsumoDAO
+
 
 '''
     MODELLO:
@@ -25,7 +27,21 @@ class Model:
         :param mese: Mese selezionato (un intero da 1 a 12)
         :return: lista di tuple --> (nome dell'impianto, media), es. (Impianto A, 123)
         """
-        # TODO
+        lista_tuple = []
+        for i in self._impianti:
+            consumi = ConsumoDAO.get_consumi(i.id)
+            consumo = 0
+            numero_occorrenze = 0
+            for j in consumi:
+                data = j.data
+                if data.month == mese:
+                    numero_occorrenze += 1
+                    consumo += j.kwh
+            media = consumo / numero_occorrenze
+            lista_tuple.append((i.nome, media))
+        return lista_tuple
+
+
 
     def get_sequenza_ottima(self, mese:int):
         """
@@ -46,12 +62,25 @@ class Model:
 
     def __ricorsione(self, sequenza_parziale, giorno, ultimo_impianto, costo_corrente, consumi_settimana):
         """ Implementa la ricorsione """
-        # TODO
+
+
 
     def __get_consumi_prima_settimana_mese(self, mese: int):
         """
         Restituisce i consumi dei primi 7 giorni del mese selezionato per ciascun impianto.
         :return: un dizionario: {id_impianto: [kwh_giorno1, ..., kwh_giorno7]}
         """
-        # TODO
+        dizionario = {}
+        for i in self._impianti:
+            consumi = ConsumoDAO.get_consumi(i.id)
+            lista_consumi_giorni = [0] * 7   ##nell'eccezione in cui non ci siano valori per quel giorno
+            for j in consumi:
+                if j.data.month == mese and 1 <= j.data.day <= 7:
+                    lista_consumi_giorni[j.data.day - 1] = j.kwh ##in modo tale che sia anche una lista ordinata
+            dizionario[i.id_impianto] = lista_consumi_giorni
+        return dizionario
+
+
+
+
 
