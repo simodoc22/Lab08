@@ -62,25 +62,36 @@ class Model:
 
     def __ricorsione(self, sequenza_parziale, giorno, ultimo_impianto, costo_corrente, consumi_settimana):
         """ Implementa la ricorsione """
-        """""""""""
-        # 🟤 E - istruzioni che dovrebbero essere sempre eseguite (raramente necessarie)
-        do_always(...)
+        if giorno ==8:
+            self.__sequenza_ottima= sequenza_parziale  ##quando si arriva all'ottavo giorno aggiorno tutti i valori
+            self.__costo_ottimo = costo_corrente
+        else:
+            id_costo_minore = ""
+            costo_minore = 10000000000000000000     ##imposto un costo iniziale tendente all'infinito in modo tale che il primo paragone
+            for key,val in consumi_settimana.items():  ##sia sicuramente vero
+                if not ultimo_impianto:            ##durante il primo ciclo dato che ultimo_impianto = none
+                    somma = int(val[giorno-1])
+                    if somma<costo_minore:
+                        id_costo_minore = key
+                        costo_minore = somma
+                else:                            ##in caso non sia None
+                    id_corrente = ultimo_impianto
+                    if key == id_corrente:        ##se la chiave è uguale all'id_corrente allora calcolo senza l'aggiunta di 5
+                        somma = int(val[giorno-1])
+                        if somma<costo_minore:
+                            id_costo_minore = key
+                            costo_minore = somma
+                    else:                         ##in caso contrario aggiungo 5 poichè bisogna spostarsi in un altro impianto
+                        somma = int(val[giorno-1])+5
+                        if somma<costo_minore:
+                            id_costo_minore = key
+                            costo_minore = somma
+            giorno+=1
+            ultimo_impianto= id_costo_minore
+            costo_corrente+=costo_minore        ##riaggionro i parametri prima di effttuare la ricorsione nuovamente
+            sequenza_parziale.append(ultimo_impianto)
+            return self.__ricorsione(sequenza_parziale, giorno,ultimo_impianto, costo_corrente, consumi_settimana)
 
-        # 🟢 A
-        if terminal_condition:
-            do_something(...)
-            return ...
-
-        for ...:  # un loop, se necessario
-            # 🔵 B
-            compute_partial()
-
-            if filter:  # 🟡 C - Se necessario filtrare prima di procedere con la ricorsione
-                recursion(..., level + 1)
-
-            # 🟣 D
-            back_tracking()
-        """""""""""
 
 
     def __get_consumi_prima_settimana_mese(self, mese: int):
